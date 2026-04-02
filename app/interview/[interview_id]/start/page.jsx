@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { InterviewDataContext } from '@/context/InterviewDataContext';
 import { Button } from '@/components/ui/button';
-import { Phone } from "lucide-react";
+import { Phone, User, Mic, MicOff } from "lucide-react";
 import Image from "next/image";
 import TimerComponent from './_components/TimerCmponent';
 import { toast } from 'sonner';
@@ -12,9 +12,8 @@ import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import Vapi from '@vapi-ai/web';
 
-// Initialize Vapi with the user's validated Public Key from the screenshot
-// We hardcode it here to eliminate any .env loading issues
-const vapiPublicKey = "d08904a8-722d-4c5c-ac3c-883bb9768e03";
+// Initialize Vapi with the Public Key from environment variable
+const vapiPublicKey = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY;
 const vapi = new Vapi(vapiPublicKey);
 
 function StartInterview() {
@@ -94,18 +93,9 @@ function StartInterview() {
       const assistantOptions = {
         name: "AI Recruiter",
         firstMessage: "Hello, I am your AI recruiter. Welcome to the interview. Shall we begin?",
-        transcriber: {
-          provider: "deepgram",
-          model: "nova-2",
-          language: "en-US",
-        },
-        voice: {
-          provider: "playht",
-          voiceId: "jennifer",
-        },
         model: {
           provider: "openai",
-          model: "gpt-3.5-turbo",
+          model: "gpt-4o-mini", // More modern and reliable than 3.5-turbo
           messages: [
             {
               role: "system",
@@ -132,7 +122,14 @@ function StartInterview() {
   const onCallEnd = () => {
     setIsInterviewActive(false);
     toast("✅ Interview Ended");
-    GenerateFeedback();
+
+    // Safeguard: Don't generate feedback if the call crashed before any conversation happened
+    if (conversation && conversation.length > 0) {
+      GenerateFeedback();
+    } else {
+      toast("No conversation detected. Skipping feedback.");
+      router.replace('/interview/' + interview_id + '/completed');
+    }
   };
 
   const GenerateFeedback = async () => {

@@ -26,7 +26,7 @@ function Provider({ children }) {
 
             console.log(Users);
 
-            if (Users?.length == 0) {
+            if (Users?.length === 0) {
                 const { data, error } = await supabase
                     .from('Users')
                     .insert([
@@ -34,12 +34,16 @@ function Provider({ children }) {
                             name: user?.user_metadata?.name,
                             email: user?.email,
                             picture: user?.user_metadata?.picture,
+                            credits: 3, // Give new users 3 free credits to start
                         },
                     ])
-                console.log(data)
-                setUser(data);
+                    .select();
+                if (error) {
+                    console.error('Error creating user:', error);
+                    return;
+                }
+                setUser(data?.[0]);
                 return;
-                // .select();
             }
             // if not then make new
             setUser(Users[0]);

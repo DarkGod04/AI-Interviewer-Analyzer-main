@@ -10,27 +10,23 @@ import {
     SidebarMenuItem,
     SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
-import { Plus } from 'lucide-react';
+import { Plus, Zap } from 'lucide-react';
 import Link from "next/link";
 import { SideBarOptions } from "@/services/Constants";
 import { usePathname } from "next/navigation"
-import { Progress } from '@/components/ui/progress';
 import { useUser } from '@/app/provider';
 import { supabase } from '@/services/supabaseClient';
 
 export function AppSidebar() {
 
     const path = usePathname();
-
     const { user } = useUser();
     const [userCredits, setUserCredits] = useState(0);
 
-    // fetch credits
     useEffect(() => {
         const fetchCredits = async () => {
             if (!user?.email) return;
-            const { data, error } = await supabase
+            const { data } = await supabase
                 .from('Users')
                 .select('credits')
                 .eq('email', user.email)
@@ -41,54 +37,106 @@ export function AppSidebar() {
     }, [user]);
 
     const displayMax = Math.max(userCredits, 100);
+    const creditPercent = displayMax ? Math.round((userCredits / displayMax) * 100) : 0;
 
     return (
-        <Sidebar className="border-r border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 backdrop-blur-sm">
-            <SidebarHeader className="flex items-center mt-6 flex-col gap-4">
-                <div className="relative group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-violet-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+        <Sidebar>
+            {/* ── Logo ── */}
+            <SidebarHeader className="flex items-center mt-6 flex-col gap-5 px-5 pb-4 border-b border-slate-200/60">
+                <div className="relative group cursor-pointer hover:scale-105 transition-transform duration-300">
+                    <div className="absolute -inset-3 bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full blur-2xl opacity-15 group-hover:opacity-30 transition duration-500" />
                     <img
                         src={'/veritas_logo.png'}
                         alt='VeritasAI Logo'
-                        width={200}
-                        height={100}
-                        className='relative w-[140px] h-auto rounded-xl border-4 border-white dark:border-gray-800 shadow-lg transition-transform duration-300 group-hover:scale-105'
+                        width={136}
+                        height={96}
+                        className='relative z-10 drop-shadow-sm'
                     />
                 </div>
 
-                <Button className="w-[90%] mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Create New Interview
-                </Button>
+                {/* Create Interview CTA */}
+                <Link href="/dashboard/create-interview" className="w-full">
+                    <div className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold text-white cursor-pointer transition-all duration-300 hover:opacity-90 hover:-translate-y-0.5 active:scale-95"
+                        style={{
+                            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                            boxShadow: '0 4px 14px rgba(99,102,241,0.3)',
+                        }}
+                    >
+                        <Plus className="h-4 w-4" />
+                        Create Interview
+                    </div>
+                </Link>
             </SidebarHeader>
 
-            <SidebarContent className="mt-4 px-2">
+            {/* ── Nav Items ── */}
+            <SidebarContent className="mt-4 px-3">
                 <SidebarGroup>
-                    <SidebarMenu className="space-y-1">
-                        {SideBarOptions.map((option, index) => (
-                            <SidebarMenuItem key={index}>
-                                <SidebarMenuButton asChild className={`p-3 rounded-xl transition-all duration-200 ${path == option.path ? 'bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 shadow-sm font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'}`}>
-                                    <Link href={option.path}>
-                                        <div className="flex items-center gap-3">
-                                            <option.icon className={`h-5 w-5 ${path == option.path ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-gray-100'}`} />
-                                            <span className="text-sm">{option.name}</span>
-                                        </div>
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        ))}
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 px-2">Menu</p>
+                    <SidebarMenu className="space-y-0.5">
+                        {SideBarOptions.map((option, index) => {
+                            const isActive = path === option.path;
+                            return (
+                                <SidebarMenuItem key={index}>
+                                    <SidebarMenuButton asChild>
+                                        <Link href={option.path}
+                                            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 font-medium text-sm ${
+                                                isActive
+                                                    ? 'text-indigo-600 bg-indigo-50 border border-indigo-100'
+                                                    : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+                                            }`}
+                                        >
+                                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
+                                                isActive
+                                                    ? 'bg-indigo-600 text-white shadow-md'
+                                                    : 'bg-slate-100 text-slate-400 group-hover:bg-slate-200'
+                                            }`}>
+                                                <option.icon className="h-4 w-4" />
+                                            </div>
+                                            <span className="tracking-wide">{option.name}</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            );
+                        })}
                     </SidebarMenu>
                 </SidebarGroup>
             </SidebarContent>
 
-            <SidebarFooter className="p-4">
-                <div className="w-full p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
+            {/* ── Credits Footer ── */}
+            <SidebarFooter className="p-4 border-t border-slate-200/60">
+                <div className="relative overflow-hidden rounded-2xl p-4"
+                    style={{
+                        background: 'linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%)',
+                        border: '1px solid rgba(99,102,241,0.15)',
+                    }}
+                >
                     <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Credits</span>
-                        <span className="text-sm font-bold text-gray-900 dark:text-gray-100">{userCredits}</span>
+                        <div className="flex items-center gap-1.5">
+                            <div className="w-6 h-6 rounded-lg flex items-center justify-center"
+                                style={{ background: 'rgba(99,102,241,0.12)' }}>
+                                <Zap className="w-3.5 h-3.5 text-indigo-600" />
+                            </div>
+                            <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">Credits</span>
+                        </div>
+                        <span className="text-lg font-extrabold text-indigo-600">{userCredits}</span>
                     </div>
-                    <Progress value={displayMax ? (userCredits / displayMax) * 100 : 0} className="h-2 bg-gray-100 dark:bg-gray-700" indicatorClassName="bg-gradient-to-r from-blue-500 to-violet-500" />
-                    <p className="text-xs text-gray-400 mt-2 text-center">Upgrade for more</p>
+
+                    {/* Progress bar */}
+                    <div className="h-1.5 w-full bg-white/80 rounded-full overflow-hidden border border-indigo-100">
+                        <div
+                            className="h-full rounded-full transition-all duration-700"
+                            style={{
+                                width: `${creditPercent}%`,
+                                background: 'linear-gradient(90deg, #6366f1, #8b5cf6)',
+                            }}
+                        />
+                    </div>
+
+                    <Link href="/billings">
+                        <div className="mt-3 w-full py-2 rounded-xl text-xs font-bold text-center text-indigo-600 bg-white border border-indigo-200 hover:bg-indigo-600 hover:text-white cursor-pointer transition-all duration-300 shadow-sm">
+                            Upgrade Plan
+                        </div>
+                    </Link>
                 </div>
             </SidebarFooter>
         </Sidebar>

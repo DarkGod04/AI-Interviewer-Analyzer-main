@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Rocket } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 function InterviewComplete() {
    const router = useRouter();
@@ -56,9 +57,11 @@ function InterviewComplete() {
 
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-                    <Button size="lg" className="px-8">
-                        View Dashboard
-                    </Button>
+                    <Link href="/dashboard">
+                        <Button size="lg" className="px-8">
+                            View Dashboard
+                        </Button>
+                    </Link>
 
                 </div>
             </div>

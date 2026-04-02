@@ -1,37 +1,3 @@
-// "use client";
-// import React ,{useState} from 'react'
-// import { Progress } from "@/components/ui/progress"
-// import { ArrowLeft } from "lucide-react";
-// import { useRouter } from "next/navigation";
-// import FormContainer from './_components/FormContainer';
-// function page() {
-//     const router = useRouter();
-//    const [step, setStep]= useState(1);
-//    const [formData , setFormData]= useState();
-
-//     const onHandleInputChange=(field, value)=>{
-//         setFormData(prev=>({
-//             ...prev,
-//             [field]: value
-//         }))
-//         console.log(formData);
-//     }
-
-//     return (
-
-//         <div className="mt-10 px-10 md:px-24 lg:px-44 xl:px-56">
-//             <div className="flex gap-5 item-center">
-//                 <ArrowLeft onClick={()=>router.back()} className="mt-[6px] cursor-pointer hover:rotate-20 transition delay-100 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110" />
-//                 <h2 className="font-bold text-2xl">Create New <span className="italic font-caramel text-primary"> Interview</span></h2>
-
-//             </div>
-//             <Progress value={step*33.33} className="my-5" />
-//             <FormContainer onHandleInputChange={onHandleInputChange}/>
-//         </div>
-//     )
-// }
-
-// export default page
 
 "use client";
 import React, { useState, useEffect } from "react";
@@ -87,18 +53,28 @@ function Page() {
   };
 
   return (
-    <div className="mt-10 px-10 md:px-24 lg:px-44 xl:px-56">
-      <div className="flex gap-5 item-center">
-        <ArrowLeft
+    <div className="mt-8 px-6 md:px-16 lg:px-32 xl:px-48 pb-20">
+      <div className="flex items-center gap-6 mb-8">
+        <button 
           onClick={() => router.back()}
-          className="mt-[6px] cursor-pointer hover:rotate-20 transition delay-100 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
-        />
-        <h2 className="font-bold text-2xl">
-          Create New{" "}
-          <span className="italic font-caramel text-primary"> Interview</span>
-        </h2>
+          className="p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full shadow-sm hover:shadow-md hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-300 group"
+        >
+          <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-400 group-hover:text-primary transition-colors" />
+        </button>
+        <div>
+          <h2 className="font-extrabold text-3xl tracking-tight text-slate-800 dark:text-white">
+            Create New{" "}
+            <span className="italic font-caramel text-4xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-violet-500 font-medium px-1">
+              Interview
+            </span>
+          </h2>
+          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1 font-medium">Configure your AI candidate evaluation</p>
+        </div>
       </div>
-      <Progress value={step * 33.33} className="my-5" />
+      
+      <div className="mb-10">
+        <Progress value={step * 33.33} className="h-2 bg-slate-100 dark:bg-slate-800" indicatorClassName="bg-gradient-to-r from-primary to-violet-500" />
+      </div>
       {step == 1 ? (
         <FormContainer
           onHandleInputChange={onHandleInputChange}

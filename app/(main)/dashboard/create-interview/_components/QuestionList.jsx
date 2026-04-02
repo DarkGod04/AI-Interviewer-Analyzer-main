@@ -107,44 +107,33 @@ function QuestionList({ formData, onCreateLink }) {
   return (
     <>
       {loading && (
-        <div className="p-5 bg-blue-50 rounded-xl border border-gray-300 flex gap-5 item-center ">
-          <Loader2Icon className="animate-spin" />
-          <div>
-            <h2 className=" font-medium font-caramel">
-              Generating Interview Questions
+        <div className="glass-card p-8 rounded-3xl border-primary/20 flex flex-col items-center justify-center gap-6 mt-8 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-violet-500/5 animate-pulse pointer-events-none"></div>
+          <Loader2Icon className="w-12 h-12 text-primary animate-spin" />
+          <div className="text-center relative z-10">
+            <h2 className="font-extrabold text-2xl tracking-tight text-slate-800 dark:text-white mb-2">
+              Generating Interview <span className="text-primary font-caramel text-3xl font-medium px-1">Questions</span>
             </h2>
-            <p className="text-primary">
-              {" "}
-              Our AI is crafting personalized questions bases on your job
-              position
+            <p className="text-slate-500 dark:text-slate-400 font-medium">
+              Our AI is analyzing the requirements and crafting a personalized technical interview suite...
             </p>
           </div>
         </div>
       )}
-      {/* <div>QuestionList</div> */}
 
       {questions?.length > 0 && (
-        <div>
-          {/* <h2 className='font-bold text-lg'>Generated Interview question</h2>
-        <div className="p-5 border border-gray-200 rounded-xl">
-          {questions.map((item, index) => (
-            <div key={index} className="p-3 border border-gray-200 rounded-2xl">
-              <h2 className="font-medium">{item.question}</h2>
-              <h2 className="italic font-caramel text-primary">{item.type}</h2>
-            </div>
-          ))}
-        </div> */}
+        <div className="mt-8">
           <QuestionListContainer questions={questions} />
         </div>
       )}
       <Button
-        className="flex justifi-end mt-10 "
+        className="mt-10 w-full md:w-auto px-8 py-6 rounded-xl bg-gradient-to-r from-primary to-indigo-500 hover:from-primary/90 hover:to-indigo-500/90 text-white font-bold tracking-wide shadow-xl shadow-primary/25 transition-all hover:-translate-y-1"
         onClick={() => {
           onFinish();
         }}
         disabled={saveLoading}
       >
-        {saveLoading && <Loader2 className="animate-spin" />}
+        {saveLoading && <Loader2 className="animate-spin mr-2" />}
         Create Interview Link & Finish
       </Button>
     </>
@@ -152,54 +141,3 @@ function QuestionList({ formData, onCreateLink }) {
 }
 
 export default QuestionList;
-
-// "use client"
-// import React, { useEffect, useState } from 'react'
-// import axios from 'axios';
-// import { toast } from "sonner";
-// import { Loader2Icon } from "lucide-react";
-
-// function QuestionList({ formData }) {
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     if (formData) {
-//       GenerateQuestionList();
-//     }
-//   }, [formData]);
-
-//   const GenerateQuestionList = async () => {
-//     setLoading(true);
-
-//     try {
-//         console.log("Sending data to server:", formData);
-//       const result = await axios.post('/api/ai-model', {
-//         ...formData
-//       });
-//       setLoading(false);
-//       // Assuming you want to do something with the result, like setting questions
-//       console.log(result.data);
-//     } catch (error) {
-//       setLoading(false);
-//       // Log the error details for debugging
-//       console.error("Error details:", error);
-//       toast.error("Error generating questions: " + (error.response?.data?.message || "Something went wrong"));
-//     }
-//   }
-
-//   return (
-//     <>
-//       {loading && (
-//         <div className="p-5 bg-blue-50 rounded-xl border border-gray-100 flex gap-5 items-center">
-//           <Loader2Icon className="animate-spin" />
-//           <div>
-//             <h2>Generating Interview Questions</h2>
-//             <p>Our AI is crafting personalized questions based on your job position.</p>
-//           </div>
-//         </div>
-//       )}
-//     </>
-//   );
-// }
-
-// export default QuestionList;

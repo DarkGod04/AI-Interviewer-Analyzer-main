@@ -1,15 +1,12 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import Provider from './provider';
 import { Toaster } from "@/components/ui/sonner"
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const outfit = Outfit({
   subsets: ["latin"],
+  variable: "--font-sans", 
+  display: 'swap',
 });
 
 export const metadata = {
@@ -20,9 +17,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased scroll-smooth `} suppressHydrationWarning>
-        <Provider>{children}
-
+      <body className={`${outfit.variable} antialiased scroll-smooth font-sans text-slate-800 bg-slate-50`} suppressHydrationWarning>
+        <Provider>
+          {children}
           <Toaster />
         </Provider>
       </body>
