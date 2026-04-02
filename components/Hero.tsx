@@ -24,6 +24,14 @@ import {
   type TargetAndTransition,
   type Variants,
 } from "framer-motion";
+import { supabase } from "../services/supabaseClient";
+import { User, LogOut } from "lucide-react";
+import {
+  DropdownMenu as UIDropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(" ");
@@ -457,6 +465,21 @@ const InteractiveHero: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [session, setSession] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -763,19 +786,60 @@ const InteractiveHero: React.FC = () => {
           </div>
 
           <div className="flex items-center flex-shrink-0 space-x-4 lg:space-x-6">
-            <NavLink href="/auth" className="hidden md:inline-block">
-              Sign in
-            </NavLink>
-
-            <motion.a
-              href="/dashboard"
-              className="bg-primary text-white px-4 py-[6px] rounded-md text-sm font-semibold hover:bg-opacity-90 transition-colors duration-200 whitespace-nowrap shadow-sm hover:shadow-md"
-              whileHover={{ scale: 1.03, y: -1 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15 }}
-            >
-              Dashboard
-            </motion.a>
+            {!session ? (
+              <>
+                <NavLink href="/auth" className="hidden md:inline-block">
+                  Sign in
+                </NavLink>
+                <motion.a
+                  href="/auth"
+                  className="bg-primary text-white px-4 py-[6px] rounded-md text-sm font-semibold hover:bg-opacity-90 transition-colors duration-200 whitespace-nowrap shadow-sm hover:shadow-md"
+                  whileHover={{ scale: 1.03, y: -1 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                >
+                  Get Started
+                </motion.a>
+              </>
+            ) : (
+              <>
+                <motion.a
+                  href="/dashboard"
+                  className="bg-primary text-white px-4 py-[6px] rounded-md text-sm font-semibold hover:bg-opacity-90 transition-colors duration-200 whitespace-nowrap shadow-sm hover:shadow-md"
+                  whileHover={{ scale: 1.03, y: -1 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                >
+                  Dashboard
+                </motion.a>
+                <UIDropdownMenu>
+                  <DropdownMenuTrigger className="focus:outline-none cursor-pointer">
+                    <div className="h-8 w-8 rounded-full bg-gray-200 text-gray-800 flex items-center justify-center font-bold relative overflow-hidden transition-all hover:ring-2 hover:ring-primary hover:ring-offset-2 hover:ring-offset-black">
+                      {session.user?.user_metadata?.avatar_url ? (
+                        <img src={session.user.user_metadata.avatar_url} alt="User Avatar" className="w-full h-full object-cover" />
+                      ) : (
+                        <User size={18} />
+                      )}
+                    </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-white border-gray-200 mt-2 min-w-[12rem] rounded-xl shadow-lg p-1">
+                    <DropdownMenuItem inset={false} className="cursor-pointer hover:bg-gray-100 p-2 rounded-md font-medium" onClick={() => window.location.href='/dashboard'}>
+                      Dashboard
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      inset={false}
+                      className="cursor-pointer text-red-600 hover:text-red-700 hover:bg-red-50 p-2 rounded-md font-medium flex items-center gap-2" 
+                      onClick={async () => {
+                        await supabase.auth.signOut();
+                        window.location.href = '/';
+                      }}
+                    >
+                      <LogOut size={16} /> <span>Sign Out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </UIDropdownMenu>
+              </>
+            )}
 
             <motion.button
               className="md:hidden text-black hover:text-primary z-50"
@@ -812,9 +876,20 @@ const InteractiveHero: React.FC = () => {
                   Pricing
                 </NavLink>
                 <hr className="w-full border-t border-gray-700/50 my-2" />
-                <NavLink href="#" onClick={() => setIsMobileMenuOpen(false)}>
-                  Sign in
-                </NavLink>
+                {!session ? (
+                  <NavLink href="/auth" onClick={() => setIsMobileMenuOpen(false)}>
+                    Sign in
+                  </NavLink>
+                ) : (
+                  <NavLink href="#" onClick={async (e) => {
+                    if (e && e.preventDefault) e.preventDefault();
+                    await supabase.auth.signOut();
+                    setIsMobileMenuOpen(false);
+                    window.location.href = '/';
+                  }}>
+                    Sign out
+                  </NavLink>
+                )}
               </div>
             </motion.div>
           )}

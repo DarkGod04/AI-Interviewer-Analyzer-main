@@ -8,7 +8,7 @@ function CreateOptions() {
 
       {/* ── Create Interview Card ── */}
       <Link href="/dashboard/create-interview" className="group h-full">
-        <div className='relative h-full rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5 cursor-pointer premium-card bg-gradient-to-br from-primary to-violet-600 border-none'
+        <div className='relative h-full rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5 cursor-pointer bg-gradient-to-br from-primary to-violet-600 border-none'
           style={{
             boxShadow: '0 8px 32px rgba(99,102,241,0.3)',
           }}
@@ -52,7 +52,7 @@ function CreateOptions() {
 
       {/* ── Phone Screening Card (Coming Soon) ── */}
       <div className="group h-full">
-        <div className='premium-card relative h-full rounded-2xl overflow-hidden transition-all duration-500 border-2 border-dashed border-slate-300 bg-slate-50/50 backdrop-blur-sm hover:border-slate-400'>
+        <div className='relative h-full rounded-2xl overflow-hidden transition-all duration-500 border-2 border-dashed border-slate-300 bg-slate-50/50 backdrop-blur-sm hover:border-slate-400'>
           {/* Decorative circles */}
           <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-slate-100" />
           <div className="absolute -bottom-8 -left-8  w-32 h-32 rounded-full bg-slate-50" />
