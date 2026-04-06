@@ -42,9 +42,9 @@ export async function POST(req) {
         );
         await new Promise((resolve) => setTimeout(resolve, delay));
       } else {
-        console.error("Error in ai-feedback API:", err);
+        console.error("Error in ai-feedback API:", err?.message, err?.status, JSON.stringify(err?.error));
         return NextResponse.json(
-          { error: err.message || "Failed to generate feedback" },
+          { error: err.message || "Failed to generate feedback", details: err?.error || null },
           { status: err?.status || 500 }
         );
       }

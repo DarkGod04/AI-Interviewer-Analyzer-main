@@ -180,10 +180,35 @@ Rules:
   const GenerateFeedback = async (latestConversation) => {
     try {
       toast("⏳ Generating AI feedback...");
+      console.log("📤 Sending conversation for feedback:", latestConversation.length, "messages");
+      
       const result = await axios.post('/api/ai-feedback', { conversation: latestConversation });
-      const Content = result.data.content;
+      console.log("📥 Feedback API response:", result.data);
+
+      // Check if we got valid content back
+      const Content = result.data?.content;
+      if (!Content) {
+        console.error("No content in feedback response:", result.data);
+        toast("⚠️ AI returned empty feedback. Moving to completion.");
+        router.replace('/interview/' + interview_id + '/completed');
+        return;
+      }
+
+      // Try to extract JSON from the response
       const jsonMatch = Content.match(/\{[\s\S]*\}/);
-      const FINAL_CONTENT = jsonMatch ? jsonMatch[0] : Content.replace('```json', '').replace('```', '');
+      const FINAL_CONTENT = jsonMatch ? jsonMatch[0] : Content.replace('```json', '').replace('```', '').trim();
+      
+      console.log("📋 Extracted feedback JSON:", FINAL_CONTENT);
+
+      let parsedFeedback;
+      try {
+        parsedFeedback = JSON.parse(FINAL_CONTENT);
+      } catch (parseErr) {
+        console.error("JSON parse error:", parseErr, "Raw content:", FINAL_CONTENT);
+        toast("⚠️ Could not parse AI feedback. Moving to completion.");
+        router.replace('/interview/' + interview_id + '/completed');
+        return;
+      }
 
       const { error } = await supabase
         .from("interview-feedback")
@@ -191,16 +216,23 @@ Rules:
           userName: interviewInfo?.userName || 'Unknown',
           userEmail: interviewInfo?.userEmail || 'Unknown',
           interview_id: interview_id,
-          feedback: JSON.parse(FINAL_CONTENT),
+          feedback: parsedFeedback,
           recommended: false
         }]);
 
-      if (error) throw error;
-      toast("✅ Feedback Generated");
+      if (error) {
+        console.error("Supabase insert error:", error);
+        toast("⚠️ Feedback generated but failed to save.");
+      } else {
+        toast("✅ Feedback Generated Successfully!");
+      }
+      
       router.replace('/interview/' + interview_id + '/completed');
     } catch (err) {
-      console.error("Feedback failed:", err);
-      toast("❌ Failed to generate feedback");
+      console.error("Feedback generation failed:", err?.response?.data || err.message || err);
+      toast("❌ Failed to generate feedback: " + (err?.response?.data?.error || err.message || "Unknown error"));
+      // Still redirect so user doesn't get stuck
+      router.replace('/interview/' + interview_id + '/completed');
     }
   };
 
