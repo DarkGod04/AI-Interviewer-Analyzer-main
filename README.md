@@ -4,7 +4,7 @@
 
 RecruiterAI is a cutting-edge platform designed to streamline the recruitment process. By leveraging advanced AI avatars and real-time voice processing, it conducts autonomous, conversational interviews with candidates, providing recruiters with instant feedback and detailed analytics.
 
-![Project Banner](https://via.placeholder.com/1200x400?text=RecruiterAI+Dashboard) *(Replace with your actual screenshot)*
+![Project Banner]([https://via.placeholder.com/1200x400?text=RecruiterAI+Dashboard](https://photos.app.goo.gl/mTDvT6384zKjmDya6)) *(Replace with your actual screenshot)*
 
 ## 🚀 Key Features
 
