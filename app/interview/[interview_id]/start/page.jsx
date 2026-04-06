@@ -103,8 +103,8 @@ function StartInterview() {
           voiceId: "alloy"
         },
         model: {
-          provider: "openai",
-          model: "gpt-4o-mini", // More modern and reliable than 3.5-turbo
+          provider: "google",
+          model: "gemini-2.0-flash",
           messages: [
             {
               role: "system",
