@@ -117,7 +117,7 @@ function Interview() {
                 </label>
                 <Input
                   className="h-12 px-4 rounded-xl bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                  placeholder="e.g. Saunak Das"
+                  placeholder="e.g. Nikhil Kumar Singh"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                 />
