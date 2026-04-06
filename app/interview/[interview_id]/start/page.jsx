@@ -131,11 +131,6 @@ Rules:
       const assistantOptions = {
         name: "AI Recruiter",
         firstMessage: `Hello! I'm Jennifer, your AI recruiter for the ${jobPosition} position. Welcome to the interview. Shall we begin?`,
-        transcriber: {
-          provider: "deepgram",
-          model: "nova-2",
-          language: "en-US",
-        },
         voice: {
           provider: "openai",
           voiceId: "alloy"
