@@ -90,9 +90,41 @@ function StartInterview() {
 
       toast("Connecting to Jennifer...");
 
+      // Build the question list for the system prompt
+      const interviewData = interviewInfo?.interviewData || interviewInfo || {};
+      const questionList = interviewData?.questionList || [];
+      const jobPosition = interviewData?.jobPosition || interviewInfo?.jobPosition || 'the role';
+      const jobDescription = interviewData?.jobDescription || '';
+      const duration = interviewData?.duration || '15';
+      const interviewType = interviewData?.type || 'General';
+
+      let questionBlock = '';
+      if (questionList.length > 0) {
+        questionBlock = questionList.map((q, i) => 
+          `${i + 1}. ${q.question || q}`
+        ).join('\n');
+      }
+
+      const systemPrompt = `You are "Jennifer", a professional AI recruiter conducting a ${interviewType} interview for the position of "${jobPosition}".
+${jobDescription ? `\nJob Description: ${jobDescription}` : ''}
+Interview Duration: ${duration} minutes.
+
+${questionBlock ? `You MUST ask the following pre-generated interview questions in order. Ask them one at a time, wait for the candidate's response, and provide brief professional acknowledgment before moving to the next question:
+
+${questionBlock}
+
+After all questions are asked, wrap up the interview professionally by thanking the candidate.` : 'Conduct a professional interview by asking relevant questions for this role. Ask one question at a time and wait for responses.'}
+
+Rules:
+- Be warm but professional
+- Keep your responses concise (2-3 sentences max)
+- Do NOT repeat questions the candidate has already answered
+- Listen actively and ask brief follow-ups only if the answer is unclear
+- Stay on topic and manage the interview time wisely`;
+
       const assistantOptions = {
         name: "AI Recruiter",
-        firstMessage: "Hello, I am your AI recruiter. Welcome to the interview. Shall we begin?",
+        firstMessage: `Hello! I'm Jennifer, your AI recruiter for the ${jobPosition} position. Welcome to the interview. Shall we begin?`,
         transcriber: {
           provider: "deepgram",
           model: "nova-2",
@@ -108,7 +140,7 @@ function StartInterview() {
           messages: [
             {
               role: "system",
-              content: `You are an interviewer for the ${interviewInfo?.jobPosition || 'role'}. Keep it professional and concise.`
+              content: systemPrompt
             }
           ]
         }
