@@ -21,6 +21,7 @@ function StartInterview() {
   const [activeUser, setActiveUser] = useState(false);
   const [isInterviewActive, setIsInterviewActive] = useState(false);
   const [conversation, setConversation] = useState([]);
+  const conversationRef = React.useRef([]);
   const { interview_id } = useParams();
   const router = useRouter();
 
@@ -56,10 +57,15 @@ function StartInterview() {
 
       instance.on('message', (message) => {
         if (message.type === 'transcript' && message.transcriptType === 'final') {
-          setConversation(prev => [...prev, {
+          const newEntry = {
             role: message.role,
             content: message.transcript
-          }]);
+          };
+          setConversation(prev => {
+            const updated = [...prev, newEntry];
+            conversationRef.current = updated;
+            return updated;
+          });
         }
       });
 
@@ -164,19 +170,22 @@ Rules:
     setIsInterviewActive(false);
     toast("✅ Interview Ended");
 
-    // Safeguard: Don't generate feedback if the call crashed before any conversation happened
-    if (conversation && conversation.length > 0) {
-      GenerateFeedback();
+    // Use ref to get the latest conversation (avoids stale closure)
+    const latestConversation = conversationRef.current;
+    console.log("📝 Conversation captured:", latestConversation.length, "messages");
+
+    if (latestConversation && latestConversation.length > 0) {
+      GenerateFeedback(latestConversation);
     } else {
       toast("No conversation detected. Skipping feedback.");
       router.replace('/interview/' + interview_id + '/completed');
     }
   };
 
-  const GenerateFeedback = async () => {
+  const GenerateFeedback = async (latestConversation) => {
     try {
-      const mockConversation = conversation || [];
-      const result = await axios.post('/api/ai-feedback', { conversation: mockConversation });
+      toast("⏳ Generating AI feedback...");
+      const result = await axios.post('/api/ai-feedback', { conversation: latestConversation });
       const Content = result.data.content;
       const jsonMatch = Content.match(/\{[\s\S]*\}/);
       const FINAL_CONTENT = jsonMatch ? jsonMatch[0] : Content.replace('```json', '').replace('```', '');
