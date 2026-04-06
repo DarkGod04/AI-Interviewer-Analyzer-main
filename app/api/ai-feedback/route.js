@@ -27,7 +27,7 @@ export async function POST(req) {
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     try {
       const completion = await openai.chat.completions.create({
-        model: "google/gemini-2.0-flash:free",
+        model: "google/gemma-3-27b-it:free",
         messages: [{ role: "user", content: FINAL_PROMPT }],
       });
       return NextResponse.json(completion.choices[0].message);
