@@ -93,6 +93,15 @@ function StartInterview() {
       const assistantOptions = {
         name: "AI Recruiter",
         firstMessage: "Hello, I am your AI recruiter. Welcome to the interview. Shall we begin?",
+        transcriber: {
+          provider: "deepgram",
+          model: "nova-2",
+          language: "en-US",
+        },
+        voice: {
+          provider: "openai",
+          voiceId: "alloy"
+        },
         model: {
           provider: "openai",
           model: "gpt-4o-mini", // More modern and reliable than 3.5-turbo
