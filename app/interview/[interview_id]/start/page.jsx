@@ -216,8 +216,7 @@ Rules:
           userName: interviewInfo?.userName || 'Unknown',
           userEmail: interviewInfo?.userEmail || 'Unknown',
           interview_id: interview_id,
-          feedback: parsedFeedback,
-          recommended: false
+          feedback: parsedFeedback
         }]);
 
       if (error) {
