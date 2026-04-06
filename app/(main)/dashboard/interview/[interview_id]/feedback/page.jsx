@@ -199,7 +199,7 @@ export default function FeedbackPage() {
                 <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                   <div 
                     className={`h-full bg-gradient-to-r ${metric.color} rounded-full transition-all duration-1000 ease-out`}
-                    style={{ width: \`\${(metric.score / 10) * 100}%\`, transformOrigin: 'left' }}
+                    style={{ width: `${(metric.score / 10) * 100}%`, transformOrigin: 'left' }}
                   />
                 </div>
               </div>
