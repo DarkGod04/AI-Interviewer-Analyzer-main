@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    const { conversation, jobPosition, jobDescription, interviewType } = await req.json();
+    const { conversation, jobPosition, jobDescription, interviewType, resume } = await req.json();
 
     if (!conversation || !Array.isArray(conversation)) {
       return NextResponse.json(
@@ -17,7 +17,8 @@ export async function POST(req) {
       .replace("{{conversation}}", JSON.stringify(conversation))
       .replace("{{jobPosition}}", jobPosition || "N/A")
       .replace("{{jobDescription}}", jobDescription || "N/A")
-      .replace("{{interviewType}}", interviewType || "N/A");
+      .replace("{{interviewType}}", interviewType || "N/A")
+      .replace("{{resume}}", resume || "Not provided");
 
     const openai = new OpenAI({
       baseURL: "https://openrouter.ai/api/v1",

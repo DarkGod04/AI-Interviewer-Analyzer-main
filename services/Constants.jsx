@@ -75,8 +75,11 @@ Job Title: {{jobTitle}}
 Job Description: {{jobDescription}}
 Interview Duration: {{duration}}
 Interview Type: {{type}}
+Candidate Resume: {{resume}}
+
 Your task:
 Analyze the job description to identify key responsibilities, required skills, and expected experience.
+Cross-reference these with the provided "Candidate Resume" (if provided) to tailor questions to their specific background, or identify gaps to question them on.
 Generate a list of interview questions depending on interview duration.
 Adjust the number and depth of questions to match the interview duration.
 Ensure the questions match the tone and structure of a real-life {{type}} interview.
@@ -104,11 +107,12 @@ Your task is to evaluate a candidate based on an interview transcript.
 Job Position: {{jobPosition}}
 Job Description: {{jobDescription}}
 Interview Type: {{interviewType}}
+Candidate Resume: {{resume}}
 
 Interview Conversation:
 {{conversation}}
 
-Based on the interview conversation and the job requirements above:
+Based on the interview conversation, the job requirements, and the candidate's resume above:
 1. Provide a rating out of 10 for: Technical Skills, Communication, Problem Solving, and Experience.
 2. Analyze the candidate's tone (e.g., Aggressive, Calm, Nervous, Confident) and provide a rating out of 10 for how professional it was.
 3. Provide a 3-line summary of the interview performance.

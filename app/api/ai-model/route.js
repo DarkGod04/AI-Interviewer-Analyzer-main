@@ -3,11 +3,12 @@ import { NextResponse } from "next/server";
 import { QUESTIONS_PROMPT } from "@/services/Constants";
 
 export async function POST(req) {
-  const { jobPosition, jobDescription, duration, type } = await req.json();
+  const { jobPosition, jobDescription, duration, type, resume } = await req.json();
   const FINAL_PROMPT = QUESTIONS_PROMPT.replace("{{jobTitle}}", jobPosition)
     .replace("{{jobDescription}}", jobDescription)
     .replace("{{duration}}", duration)
-    .replace("{{type}}", type);
+    .replace("{{type}}", type)
+    .replace("{{resume}}", resume || "Not provided");
 
   const openai = new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",

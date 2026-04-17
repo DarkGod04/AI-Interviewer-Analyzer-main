@@ -47,6 +47,15 @@ function FormContainer({ onHandleInputChange, GoToNext }) {
                 </div>
                 
                 <div>
+                    <h2 className="text-sm font-semibold text-slate-200 ml-1">Candidate Resume (Optional)</h2>
+                    <Textarea
+                        onChange={(event) => onHandleInputChange("resume", event.target.value)}
+                        className="mt-2 h-[150px] resize-none bg-black/40 border-white/10 ring-1 ring-transparent text-slate-100 placeholder:text-slate-500 focus-visible:ring-yellow-500/50 shadow-sm transition-all p-4 focus:bg-black/60"
+                        placeholder="Paste the candidate's resume or CV here to tailor the questions to their experience..."
+                    />
+                </div>
+                
+                <div>
                     <h2 className="text-sm font-semibold text-slate-200 ml-1">Interview Duration</h2>
                     <Select onValueChange={(value) => {
                         const duration = parseInt(value);
