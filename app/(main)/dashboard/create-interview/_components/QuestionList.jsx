@@ -21,7 +21,16 @@ function QuestionList({ formData, onCreateLink }) {
     }
   }, [formData]);
 
+  // Auto-finish once questions are ready to go straight to the interview
+  useEffect(() => {
+    if (questions.length > 0 && !saveLoading) {
+      onFinish();
+    }
+  }, [questions]);
+
   const GenerateQuestionList = async () => {
+    if (loading || questions.length > 0) return;
+    
     console.log("Sending data to server:", formData);
     setLoading(true);
 
@@ -121,21 +130,22 @@ function QuestionList({ formData, onCreateLink }) {
         </div>
       )}
 
-      {questions?.length > 0 && (
-        <div className="mt-8">
-          <QuestionListContainer questions={questions} />
+      {!loading && questions?.length > 0 && (
+        <div className="glass-card p-12 rounded-3xl border-emerald-500/20 flex flex-col items-center justify-center gap-6 mt-8 relative overflow-hidden animate-in fade-in zoom-in duration-500">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-primary/5 animate-pulse pointer-events-none"></div>
+          <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-2 shadow-lg shadow-emerald-200">
+             <PlusIcon className="w-8 h-8 text-emerald-600 animate-bounce" />
+          </div>
+          <div className="text-center relative z-10">
+            <h2 className="font-extrabold text-2xl tracking-tight text-slate-800 mb-2">
+              Interview <span className="text-emerald-500 font-caramel text-3xl font-medium px-1">Finalized!</span>
+            </h2>
+            <p className="text-slate-500 font-medium">
+              We've crafted your custom questions. Taking you to the live session now...
+            </p>
+          </div>
         </div>
       )}
-      <Button
-        className="mt-10 w-full md:w-auto px-8 py-6 rounded-xl bg-gradient-to-r from-primary to-indigo-500 hover:from-primary/90 hover:to-indigo-500/90 text-white font-bold tracking-wide shadow-xl shadow-primary/25 transition-all hover:-translate-y-1"
-        onClick={() => {
-          onFinish();
-        }}
-        disabled={saveLoading}
-      >
-        {saveLoading && <Loader2 className="animate-spin mr-2" />}
-        Create Interview Link & Finish
-      </Button>
     </>
   );
 }

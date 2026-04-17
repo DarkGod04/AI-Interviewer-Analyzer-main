@@ -5,7 +5,7 @@
 //     Calender
 //  } from "lucide-react"
 
-import { LayoutDashboard, Settings, WalletCards, List, Component, Calendar, Puzzle, User2Icon, Code2Icon, BriefcaseBusinessIcon } from 'lucide-react';
+import { LayoutDashboard, Settings, WalletCards, List, Component, Calendar, Puzzle, User2Icon, Code2Icon, BriefcaseBusinessIcon, Activity } from 'lucide-react';
 
 
 export const SideBarOptions = [
@@ -13,6 +13,11 @@ export const SideBarOptions = [
         name: "Dashboard",
         icon: LayoutDashboard,
         path: "/dashboard",
+    },
+    {
+        name: "My Performance",
+        icon: Activity,
+        path: "/performance",
     },
     {
         name: "Schedule Interview",
@@ -92,26 +97,52 @@ Example format:
 The goal is to create a structured, relevant, and time-optimized interview plan for a {{jobTitle}} role.`;
 
 
-export const FEEDBACK_PROMPT = `{{conversation}}
-Depends on this Interview Conversation between assistant and user,
-Give me feedback for user interview. Give me rating out of 10 for technical Skills,
-Communication, Problem Solving, Experience. 
-Analyze the candidate's tone (e.g., Aggressive, Calm, Nervous, Confident) and provide a rating out of 10 for how positive/professional the tone was.
-Also give me summary in 3 lines
-about the interview and one line to let me know whether is recommanded
-for hire or not with msg. Give me response in JSON format
+export const FEEDBACK_PROMPT = `
+You are an expert technical interviewer and recruiter. 
+Your task is to evaluate a candidate based on an interview transcript. 
+
+Job Position: {{jobPosition}}
+Job Description: {{jobDescription}}
+Interview Type: {{interviewType}}
+
+Interview Conversation:
+{{conversation}}
+
+Based on the interview conversation and the job requirements above:
+1. Provide a rating out of 10 for: Technical Skills, Communication, Problem Solving, and Experience.
+2. Analyze the candidate's tone (e.g., Aggressive, Calm, Nervous, Confident) and provide a rating out of 10 for how professional it was.
+3. Provide a 3-line summary of the interview performance.
+4. Provide a final recommendation (Yes/No) and a brief message explaining why.
+5. Identify 2-3 key strengths demonstrated by the candidate.
+6. Identify 1-2 weaknesses or areas for improvement.
+7. Provide an actionable "growth checklist" (2-3 suggested improvements).
+
+# FORMAT REQUIREMENT
+You MUST return your response STRICTLY as a valid JSON object matching the exact schema below. Do not include markdown code blocks (e.g. \`\`\`json) or any conversational text.
+
 {
-   feedback:{
-      rating:{
-         technicalSkills:5,
-         communication:6,
-         problemSolving:4,
-         experience:7,
-         tone:8
+   "feedback": {
+      "rating": {
+         "technicalSkills": 8,
+         "communication": 7,
+         "problemSolving": 6,
+         "experience": 8,
+         "tone": 9
       },
-      toneAnalysis: "Calm and Professional",
-      summary:<in 3 Line>,
-      Recommendation:"" (in "Yes/No") ,
-      RecommendationMsg:""
+      "toneAnalysis": "Confident and professional.",
+      "summary": "The candidate has a solid understanding of frontend development.\\nThey communicated clearly but struggled slightly with algorithms.\\nOverall, they are a strong fit.",
+      "Recommendation": "Yes",
+      "RecommendationMsg": "Strong technical foundation and good communication.",
+      "strengths": [
+         "Deep knowledge of React.",
+         "Clear communication."
+      ],
+      "weaknesses": [
+         "Hesitant when discussing backend architecture."
+      ],
+      "improvements": [
+         "Review system design principles."
+      ]
    }
-}`
+}`;
+

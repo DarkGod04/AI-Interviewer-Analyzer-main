@@ -40,26 +40,11 @@ function ScheduleInterview() {
         return;
       }
 
-      // 2. Fetch Feedback for these interviews
-      const interviewIds = interviewsData.map(item => item.interview_id);
-
-      const { data: feedbackData, error: feedbackError } = await supabase
-        .from("interview-feedback")
-        .select("interview_id, userEmail, feedback, recommended")
-        .in("interview_id", interviewIds);
-
-      if (feedbackError) {
-        console.error("Supabase error fetching feedback:", feedbackError);
-        // We continue even if feedback fetch fails, just showing interviews
-      }
-
-      // 3. Merge feedback into interviews and map duration to interviewDuration for UI compatibility
+      // 3. Map duration to interviewDuration for UI compatibility (if needed by InterviewCard, though it uses duration directly now)
       const combinedData = interviewsData.map(interview => {
-        const feedback = feedbackData?.filter(f => f.interview_id === interview.interview_id) || [];
         return {
           ...interview,
-          interviewDuration: interview.duration, // Map duration to interviewDuration for InterviewCard
-          "interview-feedback": feedback
+          interviewDuration: interview.duration
         };
       });
 

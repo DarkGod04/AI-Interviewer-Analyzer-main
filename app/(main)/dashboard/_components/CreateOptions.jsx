@@ -8,11 +8,7 @@ function CreateOptions() {
 
       {/* ── Create Interview Card ── */}
       <Link href="/dashboard/create-interview" className="group h-full">
-        <div className='relative h-full rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5 cursor-pointer bg-gradient-to-br from-primary to-violet-600 border-none'
-          style={{
-            boxShadow: '0 8px 32px rgba(99,102,241,0.3)',
-          }}
-        >
+        <div className='relative h-full rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5 cursor-pointer premium-card bg-gradient-to-br from-yellow-500/10 to-red-500/10 border border-yellow-500/20'>
           {/* Shine layer */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute top-0 w-[40%] h-full bg-gradient-to-r from-transparent via-white/15 to-transparent -skew-x-12"
@@ -20,7 +16,7 @@ function CreateOptions() {
           </div>
 
           {/* Decorative circles */}
-          <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-white/8" />
+          <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-white/5" />
           <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-white/5" />
 
           <div className="relative z-10 p-7 flex flex-col h-full">
@@ -52,31 +48,31 @@ function CreateOptions() {
 
       {/* ── Phone Screening Card (Coming Soon) ── */}
       <div className="group h-full">
-        <div className='relative h-full rounded-2xl overflow-hidden transition-all duration-500 border-2 border-dashed border-slate-300 bg-slate-50/50 backdrop-blur-sm hover:border-slate-400'>
+        <div className='premium-card relative h-full rounded-2xl overflow-hidden transition-all duration-500 border border-dashed border-yellow-500/30 bg-black/50 backdrop-blur-sm hover:border-yellow-500/50'>
           {/* Decorative circles */}
-          <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-slate-100" />
-          <div className="absolute -bottom-8 -left-8  w-32 h-32 rounded-full bg-slate-50" />
+          <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-slate-800/50" />
+          <div className="absolute -bottom-8 -left-8  w-32 h-32 rounded-full bg-slate-800/40" />
 
           <div className="relative z-10 p-7 flex flex-col h-full">
             {/* Badge */}
-            <div className="inline-flex items-center gap-1.5 mb-5 px-3 py-1 bg-amber-50 border border-amber-200 rounded-full w-fit">
-              <Lock className="w-3 h-3 text-amber-500" />
-              <span className="text-[11px] font-bold text-amber-600 uppercase tracking-widest">Coming Soon</span>
+            <div className="inline-flex items-center gap-1.5 mb-5 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full w-fit">
+              <Lock className="w-3 h-3 text-amber-400" />
+              <span className="text-[11px] font-bold text-amber-400 uppercase tracking-widest">Coming Soon</span>
             </div>
 
             {/* Icon */}
-            <div className="mb-5 w-14 h-14 bg-slate-200/60 rounded-2xl flex items-center justify-center shadow-sm">
-              <Phone className="h-7 w-7 text-slate-400" />
+            <div className="mb-5 w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center shadow-sm">
+              <Phone className="h-7 w-7 text-slate-500" />
             </div>
 
             <div className="mt-auto">
-              <h2 className="text-2xl font-extrabold text-slate-600 tracking-tight mb-1.5">
+              <h2 className="text-2xl font-extrabold text-slate-400 tracking-tight mb-1.5">
                 Phone Screening
               </h2>
-              <p className="text-slate-400 text-sm leading-relaxed font-medium">
+              <p className="text-slate-600 text-sm leading-relaxed font-medium">
                 Schedule automated AI-powered phone screening calls to filter candidates at scale.
               </p>
-              <div className="mt-5 inline-flex items-center gap-2 text-slate-400 font-semibold text-sm">
+              <div className="mt-5 inline-flex items-center gap-2 text-slate-600 font-semibold text-sm">
                 Notify Me <ArrowRight className="w-4 h-4" />
               </div>
             </div>

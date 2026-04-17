@@ -1,10 +1,16 @@
 "use client"
-import React from 'react'
-import { Button } from '@/components/ui/button';
-import { supabase } from './../../services/supabaseClient';
+import React, { useEffect, useState } from 'react'
+import { supabase } from './../../services/supabaseClient'
+import { motion } from 'framer-motion'
+import { Terminal, ShieldAlert, Fingerprint } from 'lucide-react'
 
-function login() {
-  //use for sign in with google 
+function Login() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const asyncsignInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -18,40 +24,125 @@ function login() {
     }
   }
 
+  // Avoid hydration mismatch for animations
+  if (!mounted) return null;
+
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4'>
-      <div className='flex flex-col items-center justify-center gap-6 rounded-3xl border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl p-10 shadow-2xl transition-all duration-300 hover:shadow-3xl w-full max-w-md'>
+    <div className="relative min-h-screen w-full bg-[#050505] overflow-hidden flex items-center justify-center font-sans">
+      
+      {/* ── Background Grid & Orbs ── */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1a1a00_1px,transparent_1px),linear-gradient(to_bottom,#1a1a00_1px,transparent_1px)] bg-[size:40px_40px] opacity-60 z-0" />
+      
+      <motion.div 
+        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-[-20%] left-[-10%] w-96 h-96 bg-yellow-500/20 blur-[100px] rounded-full pointer-events-none z-0" 
+      />
+      <motion.div 
+        animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        className="absolute bottom-[-10%] right-[-5%] w-[30rem] h-[30rem] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none z-0" 
+      />
+      <motion.div 
+        animate={{ y: [0, 50, 0], opacity: [0.1, 0.3, 0.1] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        className="absolute top-[30%] right-[20%] w-64 h-64 bg-red-500/10 blur-[80px] rounded-full pointer-events-none z-0" 
+      />
 
-        <div className="flex flex-col items-center gap-2 animate-in fade-in zoom-in duration-500">
-          <img src={'/veritas_logo.png'} alt='VeritasAI Logo' width={120} height={120}
-            className='w-[120px] h-auto object-contain drop-shadow-md rounded-full border-4 border-white/50 shadow-lg' />
-          <h1 className='text-3xl font-bold text-center text-gray-900 dark:text-white tracking-tight'>VeritasAI</h1>
-        </div>
+      <div className="relative z-10 w-full max-w-md p-4">
+        <motion.div
+          initial={{ y: 40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="relative glass-dark p-8 rounded-[2rem] border border-yellow-500/20 shadow-[0_0_40px_rgba(251,191,36,0.1)] overflow-hidden"
+        >
+          {/* Cyberpunk Top Accent Line */}
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-yellow-400 to-transparent" />
+          
+          <div className="absolute top-0 right-0 w-16 h-16 bg-red-500/10 rounded-bl-full" />
 
-        <div className='flex items-center flex-col w-full animate-in slide-in-from-bottom-4 duration-700 delay-150 fill-mode-backwards'>
-          <div className="relative w-full h-48 mb-6 rounded-2xl overflow-hidden group">
-            <img src={'./login.png'} alt='Login Illustration'
-              className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-110' />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+          {/* Header */}
+          <div className="flex flex-col items-center mb-10">
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.3, type: "spring", stiffness: 200, damping: 20 }}
+              className="relative w-20 h-20 mb-6 flex items-center justify-center rounded-2xl bg-[#0a0a0a] border border-zinc-800/60 shadow-xl"
+            >
+              <div className="absolute inset-0 rounded-2xl border border-yellow-500/30 opacity-50" />
+              <img src="/veritas_logo.png" alt="VeritasAI" className="w-12 h-12 object-contain filter drop-shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
+              <div className="absolute -bottom-2 -right-2 bg-yellow-400 text-black p-1 rounded-md">
+                <ShieldAlert className="w-3 h-3" />
+              </div>
+            </motion.div>
+            
+            <motion.div
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="flex items-center gap-2 mb-2"
+            >
+              <Terminal className="text-yellow-400 w-4 h-4" />
+              <span className="text-yellow-400 font-mono text-xs font-bold tracking-[0.3em] uppercase">SYSTEM.LOGIN</span>
+            </motion.div>
+            
+            <motion.h1 
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="text-3xl font-black text-white tracking-tight text-center"
+            >
+              AUTHENTICATION 
+              <br/>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-red-400 to-blue-400">
+                REQUIRED
+              </span>
+            </motion.h1>
           </div>
 
-          <h2 className='text-xl font-semibold text-center text-gray-800 dark:text-gray-100'>Welcome Back</h2>
-          <p className='text-gray-500 dark:text-gray-400 text-center mt-2 text-sm'>Your intelligent AI-powered recruitment assistant</p>
+          {/* Connection Visual */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="w-full flex items-center justify-center gap-4 mb-10"
+          >
+            <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-zinc-700" />
+            <Fingerprint className="w-6 h-6 text-zinc-500 animate-pulse" />
+            <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-zinc-700" />
+          </motion.div>
 
-          <Button
-            onClick={asyncsignInWithGoogle}
-            className="mt-8 w-full bg-gray-900 hover:bg-gray-800 text-white dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100 py-6 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-3">
-            <img className='h-6 w-6' src={'https://www.svgrepo.com/show/475656/google-color.svg'} alt="Google" />
-            Sign in with Google
-          </Button>
-        </div>
+          {/* Action Button */}
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.7 }}
+          >
+            <button
+              onClick={asyncsignInWithGoogle}
+              className="group relative w-full flex items-center justify-center gap-3 py-4 bg-zinc-900 border border-zinc-700 hover:border-yellow-400/50 rounded-xl overflow-hidden transition-all duration-300 transform hover:scale-[1.02]"
+              style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
+              <img className="h-5 w-5 relative z-10" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" />
+              <span className="relative z-10 text-zinc-100 font-bold tracking-wider text-sm">
+                SECURE LOGIN WITH GOOGLE
+              </span>
 
+              {/* Glowing hover line */}
+              <div className="absolute bottom-0 left-[20%] right-[20%] h-[1px] bg-yellow-400 opacity-0 group-hover:opacity-100 blur-[2px] transition-all duration-300" />
+            </button>
+            <p className="text-center text-zinc-600 font-mono text-[10px] uppercase tracking-[0.2em] mt-6">
+              Encrypted Connection Est. 2026
+            </p>
+          </motion.div>
+
+        </motion.div>
       </div>
-      <footer className="mt-8 text-gray-400 text-xs">
-        &copy; {new Date().getFullYear()} VeritasAI. All rights reserved.
-      </footer>
+
     </div>
   )
 }
 
-export default login;
+export default Login

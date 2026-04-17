@@ -49,7 +49,7 @@ function Page() {
 
   const onCreateLink = (interview_id) => {
     setInterviewId(interview_id);
-    setStep(step + 1);
+    router.push('/interview/' + interview_id);
   };
 
   return (
