@@ -1,7 +1,12 @@
-import { redirect } from "next/navigation";
+import Image from "next/image";
+
+import { Button } from "@/components/ui/button";
+import InteractiveHero from './../components/Hero';
 
 export default function Home() {
-  // Immediately redirect from root (/) to the dashboard
-  // If not authenticated, the app's routing/provider logic will handle kicking them to /auth
-  redirect('/dashboard');
+  return (
+    <div className="  ">
+      <InteractiveHero />
+    </div>
+  );
 }
